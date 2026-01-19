@@ -1,0 +1,50 @@
+% -------- Encoding & page layout --------
+\usepackage[utf8]{inputenc}
+\usepackage[letterpaper]{geometry}
+\geometry{verbose,tmargin=0.8in,bmargin=0.9in,lmargin=1in,rmargin=1in}
+\setlength{\parindent}{20pt}
+
+% -------- Typography --------
+\usepackage{microtype}          % improves kerning & spacing
+\usepackage{setspace}           % for \onehalfspacing / \doublespacing
+\usepackage{textcomp}
+\usepackage{relsize}
+\usepackage{xcolor}
+\usepackage{lipsum}             % (optional, dummy text)
+
+% -------- Math --------
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% -------- Figures & tables --------
+\usepackage{graphicx}
+\graphicspath{{figures/}}       % so \includegraphics{myfig} finds figures/
+\usepackage{booktabs}
+\usepackage{tablefootnote}
+\usepackage{tabularx}
+\usepackage{threeparttable}     % for table notes
+\usepackage{multirow}
+\usepackage{pdflscape}          % for landscape pages
+\usepackage{subcaption}
+\usepackage{caption}
+
+% -------- Footnotes --------
+\usepackage[bottom]{footmisc}   % push floats/footnotes to bottom of page when possible
+
+% -------- Fonts / symbols --------
+\usepackage{dsfont}             % for \mathds{1} etc.
+
+% -------- Links & smart refs --------
+\usepackage{hyperref}
+\usepackage[capitalise,noabbrev]{cleveref}
+
+% -------- Citations (BibTeX, informs2014.bst) --------
+\usepackage{natbib}
+\bibliographystyle{informs2014} % keep style here or in main; harmless either way
+% natbib punctuation & spacing preferences:
+\bibpunct[, ]{(}{)}{,}{a}{}{,}%
+\def\bibfont{\small}%
+\def\bibsep{\smallskipamount}%
+\def\bibhang{24pt}%
+\def\newblock{\ }%
+\def\BIBand{and}%

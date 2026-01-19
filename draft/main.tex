@@ -1,0 +1,69 @@
+\documentclass[11pt]{article}
+
+\input{preamble/packages}
+\input{preamble/macros}
+
+\title{Title of the Paper - Title of the Paper - Title of the Paper}
+
+\author{Octavian Ciupitu}
+
+\date{%
+   University of Cologne\\[2ex]%
+   \today
+}
+
+\begin{document}
+\maketitle
+
+\doublespacing
+
+\begin{center}
+{\small Draft. Please do not share without the authors’ permission.}
+\vspace{0.5cm}
+\end{center}
+
+\begin{abstract}
+This is a template for an academic paper. It demonstrates how to structure sections, incorporate citations and equations, present tables and figures, and use cross-references throughout the document. All tables and figures are automatically generated using R and are updated each time the R code is re-run. So, there is no need to manually update the tables and figures. For additional information on how this works, please refer to the README file. This project works best when run using Cursor.
+\end{abstract}
+
+\newpage
+
+\section{Introduction}
+\input{sections/1-introduction}
+
+\section{Theoretical Background}
+\label{sec:theoretical-background}
+\input{sections/2-theoretical-background}
+
+\section{Data}
+\label{sec:data}
+\input{sections/3-data}
+
+\section{Empirical Approach}
+\label{sec:empirical-approach}
+\input{sections/4-empirical-approach}
+
+\section{Results}
+\label{sec:results}
+\input{sections/5-results}
+
+\section{Discussion and Implications}
+\input{sections/6-discussion}
+
+
+
+\newpage
+\addcontentsline{toc}{section}{\refname}
+{
+  \onehalfspacing
+  \bibliography{references}
+}
+
+
+%appendix (if needed):
+%\section*{Appendix}
+%\label{appendix}
+%\input{sections/Appendix}
+
+
+\end{document}

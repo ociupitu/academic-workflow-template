@@ -1,0 +1,47 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "visualization",
+            "type": "shell",
+            "command": "Rscript code/visualization.R",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "main-analysis",
+            "type": "shell",
+            "command": "Rscript code/main-analysis.R",
+            "problemMatcher": []
+        },  
+        {
+            "label": "build-pdf",
+            "type": "shell",
+            "command": "touch draft/main.tex",
+            "problemMatcher": [],
+        },
+        {
+            "label": "full-workflow",
+            "dependsOn": ["visualization", "main-analysis", "build-pdf"],
+            "dependsOrder": "sequence",
+            "problemMatcher": []
+        },
+        {
+            "label": "clean-workflow",
+            "type": "shell",
+            "command": "rm -rf draft/aux_files draft/figures draft/tables draft/main.pdf draft/main.synctex.gz",
+            "windows": {
+                "options": {
+                    "shell": {
+                        "executable": "bash.exe",
+                        "args": ["-c"]
+                    }
+                }
+            },
+            "problemMatcher": []
+        }
+    ]
+}
