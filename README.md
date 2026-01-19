@@ -66,6 +66,8 @@ Before you can use this template, you'll need to install a few tools and create 
 
 Obviously we will need LaTeX to actually compile our documents. If you haven't installed it yet, download [MacTeX](https://tug.org/mactex/) for Mac or [MiKTeX](https://miktex.org/download) for Windows. The installation might take a while, but you only need to do this once.
 
+**Important:** This template requires MacTeX (Mac) or MiKTeX (Windows). I've seen users run into issues with TinyTeX, which doesn't include all the packages needed and won't work with this template. Make sure that MacTeX or MiKTeX is properly configured and later detected by Cursor as your LaTeX distribution.
+
 **2. Git**
 
 Git is a version control system that tracks changes to your files. It is the basis of modern collaborative coding and reproducible research, letting you collaborate with others and sync your work across devices. You can find the download information on the [Git Website](https://git-scm.com/install/). Note that there are different ways to download it depending on your operation system. Personally, I use a Mac, so I downloaded Git via Homebrew.
@@ -242,17 +244,18 @@ With these commands allowlisted, the automated commit command can now analyze yo
 
 ### Step 4: Check Your Setup with the Onboarding Command
 
-In the next step (Step 5), we'll run the code and generate the PDF I prepared for this template. But first, let's make sure you have everything you need: R installed, a LaTeX distribution (MacTeX or MiKTeX), and the required R packages. Instead of checking all of this manually, we'll let Cursor do it for us. This way we get a great first taste of what Cursor's AI can do.
+In the next step (Step 5), we'll run the code and generate the PDF I prepared for this template. But first, let's make sure you have everything you need: R installed, a LaTeX distribution (MacTeX or MiKTeX) properly configured, and the required R packages. Instead of checking all of this manually, we'll let Cursor do it for us. This way we get a great first taste of what Cursor's AI can do.
 
-I've created an onboarding command that automatically verifies your environment. To run it, you'll need to open Cursor's AI chat pane. Here's how:
+I've created an onboarding command that automatically verifies your entire environment setup. This command checks whether R, Python, and LaTeX are installed, verifies that LaTeX is correctly configured (e.g., that MacTeX is in your PATH and being used instead of TinyTeX), and confirms that all required R and Python packages are available. To run it, you'll need to open Cursor's AI chat pane. Here's how:
 
 1. Press `Cmd+L` (Mac) or `Ctrl+L` (Windows) to open the AI chat pane on the right side of your screen
 2. In the chat input at the bottom, type `/onboard` and press Enter
-3. Cursor will now check whether R and LaTeX are installed, and whether all required R packages are available
+3. You'll see a message explaining that Cursor will check your setup and may ask to run commands. Click "Run" when prompted
+4. Cursor will now check whether R, Python, and LaTeX are installed, verify LaTeX configuration (ensuring MacTeX or MiKTeX is in PATH), and check whether all required packages are available
 
 Based on the results:
-- **If everything is installed:** You'll see a confirmation that your environment is ready. You can proceed to the next step.
-- **If something is missing:** Cursor will either attempt to install it for you automatically, or provide you with clear instructions on how to install it yourself. Follow those instructions, then run `/onboard` again to verify.
+- **If everything is installed and configured correctly:** You'll see a confirmation that your environment is ready. You can proceed to the next step.
+- **If something is missing or misconfigured:** Cursor will either attempt to install it for you automatically, or provide you with clear instructions on how to fix it yourself. Follow those instructions, then run `/onboard` again to verify.
 
 Don't worry if the AI chat feels unfamiliar – I'll explain how to use Cursor's AI in more detail in the "Using Cursor's AI" section further below. For now, just follow the steps above to get your environment ready.
 
