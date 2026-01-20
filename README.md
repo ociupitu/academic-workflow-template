@@ -257,7 +257,6 @@ Remember the automated commit command I mentioned earlier? For it to work smooth
    - `git add`
    - `git commit`
    - `git diff`
-   - `cd`
 
 With these commands allowlisted, the automated commit command can now analyze your changes, stage files, and create commits without interrupting you for permission at every step.
 
