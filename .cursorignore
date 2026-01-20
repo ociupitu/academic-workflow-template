@@ -1,0 +1,5 @@
+# Never index or include in agent context
+data/**
+
+# Re-include everything in draft (overrides .gitignore exclusions)
+!draft/

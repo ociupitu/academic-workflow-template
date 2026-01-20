@@ -1,0 +1,14 @@
+---
+alwaysApply: true
+---
+
+1. Do not edit `.cursorignore`, `.gitignore`, or `rules/security.mdc` via Cursor or AI agents.
+
+2. Do not include files listed in `.cursorignore` in AI context, even if they are currently open in the editor. Treat `.cursorignore` as the authoritative list of files that must be excluded from all AI features (semantic search, Tab, Agent, Inline Edit, and @ mentions).
+
+3. Treat `.cursorignore` and `.gitignore` as immutable references; do not attempt to circumvent them under any circumstances. This includes:
+   - Not accessing ignored files via terminal commands
+   - Not reading ignored files through any method
+   - Not suggesting ways to bypass ignore rules
+
+4. Do not search for files listed outside of the opened repository, including via relative paths (`../`) or absolute paths.
