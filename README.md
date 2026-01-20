@@ -103,6 +103,8 @@ Inside this folder, you can create `.mdc` files that define custom rules for how
 
 The nice thing is that you can create many different rules that automatically become active for different cases. For example, you could have specific rules for `.tex` files, others for your `.py` files, and yet others for `.R` scripts. So you could define your LaTeX cursor rules as *"You are a writing assistant that improves writing quality and ensures proper academic style,"* and your R cursor rules as *"You are a coding expert specialized in statistical modeling and data analysis,"* and the AI output will always adjust to those rules depending on which type of file you're working on. It's incredibly powerful for tailoring the AI to your specific workflow. For more information about the power of Cursor Rules, check out the [official documentation](https://cursor.com/docs/context/rules).
 
+There's also a `security.mdc` file included in this template. This rule is set to `alwaysApply: true`, meaning it's active regardless of which file you're working on. It prevents the AI from editing critical configuration files (like `.cursorignore` and `.gitignore`), ensures the AI respects the files you've marked as off-limits in `.cursorignore`, and stops the AI from accessing files outside your repository. This is particularly important for academic research where you might have confidential data. The security rule adds an extra layer of protection to ensure the AI doesn't accidentally access or suggest changes to sensitive files.
+
 **`.cursor/commands`**
 
 This folder contains custom commands. Those are reusable workflows that you can invoke directly from the chat. Instead of repeatedly explaining to the AI what you want it to do, you write the instructions once and then trigger them whenever you need them. This is where those automations I mentioned earlier come to life.
@@ -129,7 +131,11 @@ This is where all your code is going to be saved. For this template, I only use 
 
 This is where all your data sits: the raw data, the transformed data, intermediate datasets, etc. Some people also like to save their graphs and figures here. However, I prefer to save them under `draft/figures/` as you'll see in a second, since they're directly tied to the document. For this template, I included an example dataset called `mtcars.csv`, which is a well-known example dataset from the R `library(datasets)`. This allows you to run the analysis scripts right away and see how everything connects.
 
-Note that it's usually not a thing to have your dataset uploaded to GitHub as I did here. In fact, most of the time this won't even work because GitHub doesn't allow uploading large data files, as it's designed for code, not datasets. Thus, it's common practice to exclude data files in your `.gitignore` file. You'll see that I've included how you would to this inside the `.gitignore` file (it's currently commmented out). This way your data stays local while your code and draft are version-controlled.
+Note that it's usually not a thing to have your dataset uploaded to GitHub as I did here. In fact, most of the time this won't even work because GitHub doesn't allow uploading large data files, as it's designed for code, not datasets. Thus, it's common practice to exclude data files in your `.gitignore` file. You'll see that I've included how you would do this inside the `.gitignore` file (it's currently commented out). This way your data stays local while your code and draft are version-controlled.
+
+Beyond version control, there's another important consideration: **data confidentiality**. In academic research, data is often sensitive or confidential, and you don't want to accidentally share it with AI models. To prevent Cursor's AI from accessing your data, I've set up a `.cursorignore` file that excludes the `data/` folder. This means the AI won't read, index, or include your data files in its context – even if you have them open in the editor.
+
+If you want to be extra safe, the most secure approach is to store your data completely outside this repository, somewhere else on your local machine. You can then reference that location in your R scripts using absolute paths. This way, there's no chance of your data ever being exposed to AI models or accidentally committed to GitHub.
 
 ### `draft/`
 
@@ -175,15 +181,28 @@ This is the heart of your paper and where your LaTeX document lives. Let me walk
 
 ### `.gitignore`
 
-Last but not least, we have the `.gitignore` file. This file tells Git which files and folders to exclude from version control. It includes standard entries you'd find in any R project: R history files (`.Rhistory`), session data (`.RData`), RStudio-specific files (`.Rproj.user/`), cache directories, and temporary files. It also ignores `.DS_Store`, which is a system file that Macs create automatically.
+This file tells Git which files and folders to exclude from version control. It includes standard entries you'd find in any R project: R history files (`.Rhistory`), session data (`.RData`), RStudio-specific files (`.Rproj.user/`), cache directories, and temporary files. It also ignores `.DS_Store`, which is a system file that Macs create automatically.
 
 Beyond these standard ignores, I've added project-specific entries:
 - `draft/aux_files/` - LaTeX auxiliary files we discussed earlier
 - `draft/main.synctex.gz` - LaTeX synchronization file
 - `draft/main.pdf` - The compiled PDF (since it can be regenerated)
 - `draft/figures/` - Generated plots from `visualization.R`
+- `data/` - Your research data (commented out in this template so you can see the example dataset)
 
-You'll notice that `data/` is commented out. Normally, you'd want to ignore the data folder since datasets are often too large for GitHub. However, for this template, I kept the small example dataset (`mtcars.csv`) in the repo so you can run the analysis immediately after cloning. In your actual projects, you should uncomment that line to exclude your data from version control.
+These are files we don't want cluttering up our Git history since they can be regenerated anytime. For `data/`, the reason is different: datasets are often too large for GitHub, and more importantly, research data is frequently confidential. In your actual projects, you should uncomment the `data/` line to exclude your data from version control.
+
+One important thing to know: Cursor also respects your `.gitignore` for AI indexing, meaning files ignored by Git are automatically hidden from the AI too (unless you specifically tell it to look at them). This is convenient, but sometimes you need more control, which brings us to `.cursorignore`.
+
+### `.cursorignore`
+
+As briefly introduced in the `data/` section above, this file gives you explicit control over which files Cursor's AI can access. You'll notice that `data/` appears in both `.gitignore` and `.cursorignore`. Why both?
+
+Here's the key difference: files in `.gitignore` are hidden from AI indexing by default, but you can still force the AI to look at them by tagging them with `@` in your prompt. Files in `.cursorignore`, on the other hand, are completely blocked. You cannot reference them with `@` mentions at all. This makes `.cursorignore` the secure choice for truly confidential data. Having `data/` in both files means it's excluded from version control AND fully protected from AI access, even if you accidentally try to reference it.
+
+Another thing you'll find in the file is a `!draft/` line with an exclamation mark. This is a negation pattern that re-includes the `draft/` folder for AI access. Since Cursor respects `.gitignore`, our generated files in `draft/` (like tables and figures) would normally be hidden from the AI. But we actually want the AI to see these files for context when helping us write. The `!draft/` pattern overrides the default, ensuring the AI has full context of your paper while still keeping your data private.
+
+To summarize: `.gitignore` is for version control (with AI hiding as a side effect), while `.cursorignore` is specifically for fine-tuning AI access – allowing you to both exclude files (like `data/`) and re-include files (like `draft/`) as needed. For more detailed information on ignore patterns and syntax, check out the [official Cursor documentation on ignore files](https://cursor.com/docs/context/ignore-files).
 
 
 ## Setting Up the Template
