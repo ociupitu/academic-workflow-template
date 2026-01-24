@@ -115,6 +115,8 @@ There's also the `onboard.md` command, which helps new collaborators get started
 
 Then there's the `review-code.md` command. As I mentioned at the beginning, we want to write good code. It should be efficient, well-documented, and easily understandable for our co-authors. This command helps you achieve that by running a comprehensive code review checklist: it checks for logic errors, evaluates code quality and structure, identifies potential security vulnerabilities, and verifies that your code is properly documented. It's like having a second pair of eyes on your code before you share it with your collaborators.
 
+Lastly, there's the `update-workflow.md` command, which helps keep your automated workflow in sync with your code. As your project evolves, you might add new analysis scripts or modify existing ones, and it's easy to forget to update the workflow tasks accordingly. This command automatically checks whether all scripts in `code/` are properly incorporated into `.vscode/tasks.json` and ensures that all dependencies (tables, figures, etc.) required by your LaTeX document can be generated when running the workflow. 
+
 For more information about Cursor Commands, check out the [official documentation](https://cursor.com/docs/context/commands).
 
 ### `.vscode/`
