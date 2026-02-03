@@ -251,7 +251,7 @@ This enables visual line wrapping without inserting actual line breaks in your f
 
 Remember the automated commit command I mentioned earlier? For it to work smoothly, Cursor needs permission to run certain terminal commands automatically. By default, Cursor asks for confirmation before running any terminal command, which would interrupt the automated workflow. If you don't set up the allowlist, the AI will ask you in the chat each time it wants to run a command. When it does, it will also offer to add that command to the allowlist permanently – but it's much more efficient to set everything up upfront. The allowlist tells Cursor which commands are safe to run without asking.
 
-1. Open Settings: `Cmd+,` (Mac) or `Ctrl+,` (Windows)
+1. Open Cursor Settings: `Shift+Cmd+J` (Mac) or `Shift+Ctrl+J` (Windows)
 2. In the search bar, type "allowlist"
 3. Find "Cursor > Terminal > Command Allowlist"
 4. Click "Add Item" and add each of these commands:
