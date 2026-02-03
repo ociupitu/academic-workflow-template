@@ -61,3 +61,5 @@ draft/tables/
 
 # The data folder is typically ignored, but kept here for demonstration purposes. Uncomment the line below to ignore it.
 # data/ 
+
+posts/
