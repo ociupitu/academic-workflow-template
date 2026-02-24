@@ -62,4 +62,7 @@ draft/tables/
 # The data folder is typically ignored, but kept here for demonstration purposes. Uncomment the line below to ignore it.
 # data/ 
 
+# Personally, I would not add the quality reports to version control, but I have kept it here for demonstration purposes. Uncomment the line below to ignore it.
+# quality_reports
+
 posts/
