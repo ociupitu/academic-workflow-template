@@ -99,6 +99,10 @@ This is the heart of the AI configuration in Claude Code. It's a file that Claud
 
 When you clone this template and start your own project, you'll customize `CLAUDE.md` with your project's specific details – the research question, institution, which files are authoritative, and the current status of each section. This means Claude Code will always know where you left off, even if you close VS Code and come back a week later.
 
+**A note on context management.** While Claude Code can technically see your entire folder structure, loading every file into context for every session would be slow and expensive. `CLAUDE.md` solves this by giving the AI a compact, always-current summary of your project instead. But there's a subtlety: a good AI assistant doesn't just need to know the current state of your project – it needs to understand its trajectory. In research, you're constantly updating one part of the project while another is still catching up. If the AI only sees a snapshot, it may apply changes inconsistently. The "Current Project State" table in `CLAUDE.md` is designed for exactly this: it tracks not just what is done, but what is in progress and what is next. Update it at the end of every working session, and the AI will always understand where you're coming from and where you're headed.
+
+**Keeping `CLAUDE.md` up to date.** You can always edit it manually. But the key automation is the `/commit` skill: every time you commit changes that include `.tex` section files, it automatically updates the Current Project State table to reflect the new status of those sections before staging. This means that as long as you use `/commit` regularly, `CLAUDE.md` largely keeps itself current.
+
 ### `.claude/`
 
 This folder is where you customize how Claude Code behaves and create powerful automations for your workflow. There are three key components: **agents**, which are specialized AI subprocesses that focus on specific review tasks; **rules**, which define how the AI behaves when working with different file types; and **skills**, which let you create reusable workflows that you can trigger with a simple slash command. Let me explain each.
