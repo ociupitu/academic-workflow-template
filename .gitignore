@@ -53,11 +53,14 @@ rsconnect/
 # Additional files to be ignored
 .DS_Store
 
-draft/aux_files/
+draft/aux_files/*
+!draft/aux_files/.gitkeep
 draft/main.synctex.gz
 draft/main.pdf
-draft/figures/
-draft/tables/
+draft/figures/*
+!draft/figures/.gitkeep
+draft/tables/*
+!draft/tables/.gitkeep
 
 # The data folder is typically ignored, but kept here for demonstration purposes. Uncomment the line below to ignore it.
 # data/ 

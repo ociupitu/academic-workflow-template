@@ -32,7 +32,7 @@
         {
             "label": "clean-workflow",
             "type": "shell",
-            "command": "rm -rf draft/aux_files draft/figures draft/tables draft/main.pdf draft/main.synctex.gz",
+            "command": "rm -rf draft/aux_files/* draft/figures/* draft/tables/* draft/main.pdf draft/main.synctex.gz",
             "windows": {
                 "options": {
                     "shell": {
