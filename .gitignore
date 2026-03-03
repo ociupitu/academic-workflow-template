@@ -69,3 +69,8 @@ draft/tables/*
 # quality_reports
 
 posts/
+
+# Playwright MCP cache
+.playwright-mcp/
+
+.mcp.json

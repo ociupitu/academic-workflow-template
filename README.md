@@ -143,10 +143,13 @@ This folder contains reusable slash-command workflows. Instead of repeatedly exp
 | `/interview-me [topic]` | Interactive interview to formalize your research ideas into a precise specification |
 | `/validate-bib` | Cross-references citations in your `.tex` files against `references.bib` and flags missing or unused entries |
 | `/devils-advocate` | Challenges your arguments with critical questions to identify weaknesses before submission |
+| `/method-precedent [question]` | Searches published papers to justify a methodological decision in your research |
 
 To invoke a skill, simply type `/skill-name` in the Claude Code chat panel. For example, type `/commit` and Claude Code will analyze your uncommitted changes and propose well-structured commit messages.
 
 Creating your own skill is straightforward: add a new folder inside `.claude/skills/` (e.g., `.claude/skills/improve-writing/`) and create a `SKILL.md` file inside it with instructions for what the AI should do when the skill is invoked. You've just built a reusable workflow.
+
+One skill in the table above requires extra setup before it will work: `/method-precedent`. This skill helps you find published papers that justify specific methodological choices in your research – it searches academic databases and retrieves full PDFs to surface relevant precedents. It relies on two MCP servers (Model Context Protocol servers, which extend Claude Code with external tools): an academic search server that queries Semantic Scholar and Crossref, and a Playwright server for browser-based PDF retrieval. Setting these up requires a couple of additional steps and a free API key. I cover the details at the end of this README; all other skills work without any of this.
 
 ### `.vscode/`
 
@@ -433,6 +436,40 @@ Now that you have the template running and know how to use Claude Code to help y
 - **Explore the other tasks**: Have a look at the other tasks in `.vscode/tasks.json`. Try running `clean-workflow` (via `Cmd+Shift+P` → "Tasks: Run Task") and see what happens (it removes all generated outputs). Then run `full-workflow` again to regenerate everything. This shows you how easy it is to start fresh and verify that your entire paper reproduces correctly.
 
 The more you experiment, the more comfortable you'll become with this automated workflow. Don't be afraid to break things. If things get out of control, you can simply recover the initial state of the project from git. And remember, whenever you run into trouble or have questions, just ask Claude Code for help. That's what it's there for.
+
+
+## Setting Up MCP Servers (Optional and Genuinely Hard to Get Right)
+
+This section is only relevant if you want to use the `/method-precedent` skill. Everything else in the template works without it. If you're not planning to use that skill, feel free to skip this entirely.
+
+### Prerequisites
+
+- **Python 3.10+** with `pip install mcp httpx`
+- **Node.js** (for `npx`, used by the Playwright MCP server)
+- **A free Semantic Scholar API key** – register at [https://www.semanticscholar.org/product/api](https://www.semanticscholar.org/product/api)
+
+### Setup
+
+The repo ships with two files relevant to this: `server.py` and `.mcp.json.example`. The `server.py` file is the academic search MCP server – it's a modified version of [afrise/academic-search-mcp-server](https://github.com/afrise/academic-search-mcp-server) with fixes for API key authentication and full metadata retrieval. The `.mcp.json.example` file is a template configuration for connecting Claude Code to both MCP servers.
+
+To set it up:
+
+1. Copy `.mcp.json.example` to `.mcp.json` in the project root.
+2. Open `.mcp.json` and paste your Semantic Scholar API key where it says `YOUR_API_KEY_HERE`.
+3. Copy `server.py` from the repo root to a stable location outside the project, such as `~/.claude/mcp-servers/academic-search/server.py` (create the folder if it doesn't exist). Then update the path in `.mcp.json` to point there – something like `/Users/yourname/.claude/mcp-servers/academic-search/server.py`. Use the absolute path; no `~/` shorthand.
+4. `.mcp.json` is already in `.gitignore`, so your API key will never be pushed to Git.
+5. For the Playwright MCP server, no separate installation is needed. The config in `.mcp.json.example` already points to `npx @playwright/mcp@latest`, which downloads everything automatically on first use. Make sure Node.js is installed (`node --version` in your terminal should return something) and `npx` is available.
+6. Restart Claude Code so it picks up the new MCP configuration.
+
+This setup is genuinely fiddly, and the above may not cover every edge case on your specific system. If you get stuck, the best move is to just ask Claude Code directly: it can see `server.py`, `.mcp.json`, and the full project, so it understands exactly what's installed and what's missing. Something like *"Help me get the `/method-precedent` skill working – here's the error I'm seeing"* will get you much further than any static guide.
+
+### Usage
+
+Once the servers are running, type `/method-precedent` followed by your methodological question in the Claude Code chat. For example:
+
+> `/method-precedent Why is it appropriate to use a two-way fixed effects estimator with staggered treatment timing in a difference-in-differences design, and what are the key assumptions and potential issues I should address?`
+
+Claude Code will search Semantic Scholar and Crossref for relevant papers, retrieve full PDFs where available, and return a set of precedents with citations you can use to justify your methodological choices.
 
 
 ## Final Thoughts
