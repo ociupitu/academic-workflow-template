@@ -8,6 +8,7 @@
                 "-interaction=nonstopmode",
                 "-file-line-error",
                 "-pdf",
+                "-cd",                
                 "-auxdir=%DIR%/aux_files",
                 "%DOC%"
             ]
