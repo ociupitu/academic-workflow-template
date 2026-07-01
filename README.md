@@ -452,12 +452,12 @@ To set it up:
 
 1. **Clone the server** to a stable location outside this project and install its dependencies:
    ```bash
-   git clone https://github.com/ociupitu/academic-search-mcp.git ~/mcp-servers/academic-search-mcp
-   cd ~/mcp-servers/academic-search-mcp
+   git clone https://github.com/ociupitu/academic-search-mcp.git ~/.claude/mcp-servers/academic-search-mcp
+   cd ~/.claude/mcp-servers/academic-search-mcp
    uv sync
    ```
 2. Copy `.mcp.json.example` to `.mcp.json` in this project's root.
-3. In `.mcp.json`, set the `--directory` path of the `academic-search` server to wherever you cloned it – something like `/Users/yourname/mcp-servers/academic-search-mcp`. Use the absolute path; no `~/` shorthand.
+3. In `.mcp.json`, set the `--directory` path of the `academic-search` server to wherever you cloned it – something like `/Users/yourname/.claude/mcp-servers/academic-search-mcp`. Use the absolute path; no `~/` shorthand.
 4. **API key (optional):** paste a Semantic Scholar key where it says `YOUR_API_KEY_HERE`, or delete the whole `"env"` block to run keyless.
 5. `.mcp.json` is already in `.gitignore`, so your API key will never be pushed to Git.
 6. For the Playwright MCP server, no separate installation is needed. The config in `.mcp.json.example` already points to `npx @playwright/mcp@latest`, which downloads everything automatically on first use. Make sure Node.js is installed (`node --version` in your terminal should return something) and `npx` is available.
