@@ -78,12 +78,11 @@ project/
 |---------|-------------|
 | `/onboard` | Check all dependencies and environment |
 | `/compile-latex` | Build PDF via latexmk |
-| `/lit-review [topic]` | Literature search + synthesis |
-| `/research-ideation [topic]` | Research questions + strategies |
-| `/interview-me [topic]` | Interactive research interview |
 | `/validate-bib` | Cross-reference citations |
 | `/devils-advocate` | Challenge arguments |
 | `/commit [msg]` | Stage, commit, PR, merge |
+| `/method-precedent [question]` | Find published precedents for a methodological choice (needs MCP setup) |
+| `/related-literature [streams]` | Build the related-work section stream by stream (needs MCP setup) |
 
 ---
 

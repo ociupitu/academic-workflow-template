@@ -138,18 +138,16 @@ This folder contains reusable slash-command workflows. Instead of repeatedly exp
 | `/onboard` | Verifies your entire environment: R version, LaTeX distribution, required packages, and runs a full smoke test |
 | `/compile-latex` | Builds the PDF via latexmk and reports any errors or warnings |
 | `/commit` | Analyzes unstaged changes, groups them logically, and generates well-documented commit messages |
-| `/lit-review [topic]` | Structured literature search with citation extraction and synthesis |
-| `/research-ideation [topic]` | Generates research questions, testable hypotheses, and empirical strategies |
-| `/interview-me [topic]` | Interactive interview to formalize your research ideas into a precise specification |
 | `/validate-bib` | Cross-references citations in your `.tex` files against `references.bib` and flags missing or unused entries |
 | `/devils-advocate` | Challenges your arguments with critical questions to identify weaknesses before submission |
 | `/method-precedent [question]` | Searches published papers to justify a methodological decision in your research |
+| `/related-literature [streams]` | Builds a "Related Literature" section stream by stream, verifying existing cites and drafting a contribution paragraph for each |
 
 To invoke a skill, simply type `/skill-name` in the Claude Code chat panel. For example, type `/commit` and Claude Code will analyze your uncommitted changes and propose well-structured commit messages.
 
 Creating your own skill is straightforward: add a new folder inside `.claude/skills/` (e.g., `.claude/skills/improve-writing/`) and create a `SKILL.md` file inside it with instructions for what the AI should do when the skill is invoked. You've just built a reusable workflow.
 
-One skill in the table above requires extra setup before it will work: `/method-precedent`. This skill helps you find published papers that justify specific methodological choices in your research – it searches academic databases and retrieves full PDFs to surface relevant precedents. It relies on two MCP servers (Model Context Protocol servers, which extend Claude Code with external tools): an academic search server that queries Semantic Scholar and Crossref, and a Playwright server for browser-based PDF retrieval. Setting these up requires a couple of additional steps and a free API key. I cover the details at the end of this README; all other skills work without any of this.
+Two skills in the table above require extra setup before they will work: `/method-precedent` and `/related-literature`. Both find published papers (the first to justify a methodological choice, the second to build the related-work section) and retrieve full PDFs to surface relevant work. They rely on two MCP servers (Model Context Protocol servers, which extend Claude Code with external tools): an academic search server that queries Semantic Scholar, and a Playwright server for browser-based PDF retrieval. Setting these up requires cloning one small repository and a couple of config steps; a Semantic Scholar API key is optional. I cover the details at the end of this README; all other skills work without any of this.
 
 ### `.vscode/`
 
@@ -397,9 +395,6 @@ Here's the full list of skills included in this template:
 | `/onboard` | Check your environment setup when you first clone the repo |
 | `/compile-latex` | Build the PDF and get a clean error report |
 | `/commit` | Generate well-documented commit messages for your unstaged changes |
-| `/lit-review [topic]` | Search for and synthesize literature on a specific topic |
-| `/research-ideation [topic]` | Brainstorm research questions and empirical strategies |
-| `/interview-me [topic]` | Have Claude Code interview you to formalize your research ideas |
 | `/validate-bib` | Find missing, unused, or malformed citations |
 | `/devils-advocate` | Get critical questions to stress-test your arguments |
 
@@ -438,30 +433,37 @@ Now that you have the template running and know how to use Claude Code to help y
 The more you experiment, the more comfortable you'll become with this automated workflow. Don't be afraid to break things. If things get out of control, you can simply recover the initial state of the project from git. And remember, whenever you run into trouble or have questions, just ask Claude Code for help. That's what it's there for.
 
 
-## Setting Up MCP Servers (Optional and Genuinely Hard to Get Right)
+## Setting Up MCP Servers (Optional)
 
-This section is only relevant if you want to use the `/method-precedent` skill. Everything else in the template works without it. If you're not planning to use that skill, feel free to skip this entirely.
+This section is only relevant if you want to use the `/method-precedent` or `/related-literature` skills. Everything else in the template works without it. If you're not planning to use those skills, feel free to skip this entirely.
 
 ### Prerequisites
 
-- **Python 3.10+** with `pip install mcp httpx`
+- **Python 3.10+**
+- **[uv](https://docs.astral.sh/uv/)** – the Python package manager used to install and run the server (`pip install uv` or see the uv install docs)
 - **Node.js** (for `npx`, used by the Playwright MCP server)
-- **A free Semantic Scholar API key** – register at [https://www.semanticscholar.org/product/api](https://www.semanticscholar.org/product/api)
+- **A Semantic Scholar API key is optional.** The server runs without one; you are just placed on Semantic Scholar's shared, rate-limited pool. For steadier throughput, register a free key at [https://www.semanticscholar.org/product/api](https://www.semanticscholar.org/product/api).
 
 ### Setup
 
-The repo ships with two files relevant to this: `server.py` and `.mcp.json.example`. The `server.py` file is the academic search MCP server – it's a modified version of [afrise/academic-search-mcp-server](https://github.com/afrise/academic-search-mcp-server) with fixes for API key authentication and full metadata retrieval. The `.mcp.json.example` file is a template configuration for connecting Claude Code to both MCP servers.
+The academic search server lives in its own repository: **[ociupitu/academic-search-mcp](https://github.com/ociupitu/academic-search-mcp)** (a modified fork of [afrise/academic-search-mcp-server](https://github.com/afrise/academic-search-mcp-server), rewritten on the `semanticscholar` library with batch and recommendation tools). You clone it once, then point this project's `.mcp.json` at it. The template ships `.mcp.json.example` as the starting configuration.
 
 To set it up:
 
-1. Copy `.mcp.json.example` to `.mcp.json` in the project root.
-2. Open `.mcp.json` and paste your Semantic Scholar API key where it says `YOUR_API_KEY_HERE`.
-3. Copy `server.py` from the repo root to a stable location outside the project, such as `~/.claude/mcp-servers/academic-search/server.py` (create the folder if it doesn't exist). Then update the path in `.mcp.json` to point there – something like `/Users/yourname/.claude/mcp-servers/academic-search/server.py`. Use the absolute path; no `~/` shorthand.
-4. `.mcp.json` is already in `.gitignore`, so your API key will never be pushed to Git.
-5. For the Playwright MCP server, no separate installation is needed. The config in `.mcp.json.example` already points to `npx @playwright/mcp@latest`, which downloads everything automatically on first use. Make sure Node.js is installed (`node --version` in your terminal should return something) and `npx` is available.
-6. Restart Claude Code so it picks up the new MCP configuration.
+1. **Clone the server** to a stable location outside this project and install its dependencies:
+   ```bash
+   git clone https://github.com/ociupitu/academic-search-mcp.git ~/mcp-servers/academic-search-mcp
+   cd ~/mcp-servers/academic-search-mcp
+   uv sync
+   ```
+2. Copy `.mcp.json.example` to `.mcp.json` in this project's root.
+3. In `.mcp.json`, set the `--directory` path of the `academic-search` server to wherever you cloned it – something like `/Users/yourname/mcp-servers/academic-search-mcp`. Use the absolute path; no `~/` shorthand.
+4. **API key (optional):** paste a Semantic Scholar key where it says `YOUR_API_KEY_HERE`, or delete the whole `"env"` block to run keyless.
+5. `.mcp.json` is already in `.gitignore`, so your API key will never be pushed to Git.
+6. For the Playwright MCP server, no separate installation is needed. The config in `.mcp.json.example` already points to `npx @playwright/mcp@latest`, which downloads everything automatically on first use. Make sure Node.js is installed (`node --version` in your terminal should return something) and `npx` is available.
+7. Restart Claude Code so it picks up the new MCP configuration.
 
-This setup is genuinely fiddly, and the above may not cover every edge case on your specific system. If you get stuck, the best move is to just ask Claude Code directly: it can see `server.py`, `.mcp.json`, and the full project, so it understands exactly what's installed and what's missing. Something like *"Help me get the `/method-precedent` skill working – here's the error I'm seeing"* will get you much further than any static guide.
+If you get stuck, the best move is to just ask Claude Code directly: it can see `.mcp.json` and the full project, so it understands exactly what's configured and what's missing. Something like *"Help me get the `/method-precedent` skill working – here's the error I'm seeing"* will get you much further than any static guide.
 
 ### Usage
 
@@ -469,7 +471,7 @@ Once the servers are running, type `/method-precedent` followed by your methodol
 
 > `/method-precedent Why is it appropriate to use a two-way fixed effects estimator with staggered treatment timing in a difference-in-differences design, and what are the key assumptions and potential issues I should address?`
 
-Claude Code will search Semantic Scholar and Crossref for relevant papers, retrieve full PDFs where available, and return a set of precedents with citations you can use to justify your methodological choices.
+Claude Code will search Semantic Scholar for relevant papers, retrieve full PDFs where available, and return a set of precedents with citations you can use to justify your methodological choices. The `/related-literature` skill works similarly but builds an entire related-work section: it proposes the literature streams with you first, then searches and drafts a contribution paragraph per stream.
 
 
 ## Final Thoughts
