@@ -2,9 +2,12 @@
   "mcpServers": {
     "academic-search": {
       "type": "stdio",
-      "command": "python3",
+      "command": "uv",
       "args": [
-        "/path/to/academic-search/server.py"
+        "run",
+        "--directory",
+        "/absolute/path/to/academic-search-mcp",
+        "server.py"
       ],
       "env": {
         "SEMANTIC_SCHOLAR_API_KEY": "YOUR_API_KEY_HERE"
